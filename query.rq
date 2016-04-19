@@ -1,13 +1,6 @@
 PREFIX foaf:<http://xmlns.com/foaf/0.1/>
 
-SELECT ?nombre ?correo
+SELECT (COUNT(?v) AS ?num)
 WHERE {
-    ?v foaf:name ?nombre .
-    {
-    ?v foaf:mbox ?correo .
-    }
-    UNION
-    {
-    ?v foaf:mbox_sha1sum ?correo .
-    }
+   ?v foaf:knows ?amigo
 }
