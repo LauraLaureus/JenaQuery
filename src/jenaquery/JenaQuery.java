@@ -6,6 +6,8 @@ import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
+import org.apache.jena.query.ResultSetFactory;
+import org.apache.jena.query.ResultSetFormatter;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.riot.RDFDataMgr;
@@ -35,14 +37,19 @@ public class JenaQuery {
         Query executableQuery = QueryFactory.create(query);
         QueryExecution excecution = QueryExecutionFactory.create(executableQuery,model);
         
+        
         ResultSet results = excecution.execSelect();
+        results = ResultSetFactory.copyResults(results); //Keeps a copy 
+        excecution.close();
         for (; results.hasNext();) {
             QuerySolution sol = results.next();
             RDFNode x = sol.get("?nombre");
             System.out.println("--->" + PrintUtil.print(x));
         }
         
-        excecution.close();
+        ResultSetFormatter.out(System.out,results);
+        
+        
     }
 
 }
